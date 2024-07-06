@@ -15,14 +15,14 @@ llm = Groq(model="llama3-70b-8192", api_key=GROOQ_API_KEY)
 # Page configuration
 st.set_page_config(page_title="Business Assistant", layout="wide")
 
-st.header("Business Assistant")
-st.write("Rekan Anda dalam membuat dan merancang bisnis plan.")
+#st.header("Business Assistant")
 # Sidebar
 with st.sidebar:
-    st.title("Business Assistant")
+    st.header("Business Assistant")
+    st.write("Rekan Anda dalam membuat dan merancang bisnis plan.")
 
 # Tabs
-tab1, tab2, tab3 = st.tabs(["Ide Bisnis", "Deskripsi Bisnis", "Rencana Bisnis"])
+tab1, tab2, tab3, tab4 = st.tabs(["Ide Bisnis", "Deskripsi Bisnis", "Rencana Bisnis", "Sosial media"])
 
 # Session cache for storing form data
 if 'business_idea' not in st.session_state:
@@ -179,4 +179,20 @@ if st.session_state['business_idea']['what']:
             prompt_eksekusi=f"Berdasarkan {business_plan} yang sudah dibuat,buatkan rencana pelaksanaan bisnis dengan alur sebagai berikut:1.hal pertama yang harus dikerjakan[bila dirasa perlu membuat badan hukum, buatlah badan hukum dengan menggunakan SSO]\n"
             plan_eksekusi = generate_content(prompt_eksekusi)
             st.markdown(f'<div class="stock-analysis">{plan_eksekusi}</div>', unsafe_allow_html=True)
+
+    with tab4:
+        with st.spinner("Generate sosial media strategy"):
+            st.subheader("Sosial media yang diusulkan")
+            prompt_sosmed= f"berdasarkan {business_plan} yang sudah dibuat,buatkan rencana sosial media yang harus dikerjakan dalam bisnis.Tampilkan rekomendasi sosial media apa yang paling sesuai untuk industri dan bisnis yang ditulis dan sertakan alasan dari pemilihan sosial media tersebut. tuliskan dalam bahasa indonesia yang infomatif "
+            sosmed_plan = generate_content(prompt_sosmed)
+            st.markdown(f'<div class="stock-analysis">{sosmed_plan}</div>', unsafe_allow_html=True)
+            st.subheader("Usulan konten sosial media")
+            prompt_konten= f"berdasarkan pilihan sosial media {sosmed_plan} yang sudah dibuat, buatkan usulan konten dengan struktur: jenis sosial media, usul konten(kalau gambar tuliskan prompt, atau script untuk video), dan copywriting yang sesuai dengan konten yang ada "
+            konten_plan = generate_content(prompt_konten)
+            st.markdown(f'<div class="stock-analysis">{konten_plan}</div>', unsafe_allow_html=True)
+            
+    prompt_draft=f"berdasarkan {business_plan} yang sudah dibuat, hanya buatkan ringkasan berupa poin poin dari bisnis inide dengan data : Jenis bisnis (Jasa, FMCG, Retail, Perdagangan, lainnya), target pasar, peraturan pemerintah apa yang harus ditaati. tidak perlu menampilkan key point "
+    business_draft=generate_content(prompt_draft)
+    business_resume=st.sidebar.markdown(f'<div class="stock-analysis">{business_draft}</div>', unsafe_allow_html=True)
+
             
