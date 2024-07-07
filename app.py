@@ -170,28 +170,29 @@ with tab1:
 if st.session_state['business_idea']['what']:
     with tab2:
         with st.spinner("Generating business plan..."):
-            st.header("Business Plan")
+            st.subheader("Business Plan")
             business_plan = generate_business_plan()
             st.write(business_plan)
 
     with tab3:
         with st.spinner("Generation Rencana eksekusi"):
-            prompt_eksekusi=f"Berdasarkan {business_plan} yang sudah dibuat,buatkan rencana pelaksanaan bisnis dengan alur sebagai berikut:1.hal pertama yang harus dikerjakan[bila dirasa perlu membuat badan hukum, buatlah badan hukum dengan menggunakan SSO]\n"
+            st.subheader("Rencana aksi (action plan)")
+            prompt_eksekusi=f"Buat dalam bahasa Indoensia yang informatif,Berdasarkan {business_plan} yang sudah dibuat,buatkan rencana pelaksanaan bisnis dengan alur sebagai berikut:1.hal pertama yang harus dikerjakan[bila dirasa perlu membuat badan hukum, buatlah badan hukum dengan menggunakan SSO]\n"
             plan_eksekusi = generate_content(prompt_eksekusi)
             st.markdown(f'<div class="stock-analysis">{plan_eksekusi}</div>', unsafe_allow_html=True)
 
     with tab4:
         with st.spinner("Generate sosial media strategy"):
             st.subheader("Sosial media yang diusulkan")
-            prompt_sosmed= f"berdasarkan {business_plan} yang sudah dibuat,buatkan rencana sosial media yang harus dikerjakan dalam bisnis.Tampilkan rekomendasi sosial media apa yang paling sesuai untuk industri dan bisnis yang ditulis dan sertakan alasan dari pemilihan sosial media tersebut. tuliskan dalam bahasa indonesia yang infomatif "
+            prompt_sosmed= f"Buat dalam bahasa Indoensia yang informatif,berdasarkan {business_plan} yang sudah dibuat,buatkan rencana sosial media yang harus dikerjakan dalam bisnis.Tampilkan rekomendasi sosial media apa yang paling sesuai untuk industri dan bisnis yang ditulis dan sertakan alasan dari pemilihan sosial media tersebut."
             sosmed_plan = generate_content(prompt_sosmed)
             st.markdown(f'<div class="stock-analysis">{sosmed_plan}</div>', unsafe_allow_html=True)
             st.subheader("Usulan konten sosial media")
             prompt_konten= f"berdasarkan pilihan sosial media {sosmed_plan} yang sudah dibuat, buatkan usulan konten dengan struktur: jenis sosial media, usul konten(kalau gambar tuliskan prompt, atau script untuk video), dan copywriting yang sesuai dengan konten yang ada "
             konten_plan = generate_content(prompt_konten)
             st.markdown(f'<div class="stock-analysis">{konten_plan}</div>', unsafe_allow_html=True)
-            
-    prompt_draft=f"berdasarkan {business_plan} yang sudah dibuat, hanya buatkan ringkasan berupa poin poin dari bisnis inide dengan data : Jenis bisnis (Jasa, FMCG, Retail, Perdagangan, lainnya), target pasar, peraturan pemerintah apa yang harus ditaati. tidak perlu menampilkan key point "
+
+    prompt_draft=f"Buat dalam bahasa Indoensia yang informatif berdasarkan {business_plan} yang sudah dibuat, hanya buatkan ringkasan berupa poin poin dari bisnis inside dengan data : Jenis bisnis (Jasa, FMCG, Retail, Perdagangan, lainnya), target pasar, peraturan pemerintah apa yang harus ditaati. tidak perlu menampilkan key point "
     business_draft=generate_content(prompt_draft)
     business_resume=st.sidebar.markdown(f'<div class="stock-analysis">{business_draft}</div>', unsafe_allow_html=True)
 
