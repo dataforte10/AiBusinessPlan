@@ -17,23 +17,33 @@ def chat(self, keywords: str, model: str = "gpt-3.5", timeout: int = 20) -> str:
         str: The response from the AI.
     """
 
-
-
 # Set the page title and layout
 st.set_page_config(page_title="Home", layout="wide")
 st.title("Home")
 
-if "inspirasi" not in st.session_state:
-    st.session_state["inspirasi"] = None
 
-st.subheader("Inspirasi bisnis Anda")
+if "inspirasi" not in st.session_state:
+    st.session_state["inspirasi"] = ""
+
+if "lini bisnis" not in st.session_state:
+    st.session_state["lini bisnis"] = ""
+
+input=st.session_state["lini bisnis"]
+st.subheader(f"Inspirasi bisnis Anda dalam lini {input}")
 
 with st.sidebar:
-    input = st.text_input("Tuliskan lini bisnis Anda: ")
+    st.session_state["lini bisnis"] = st.text_input("Tuliskan lini bisnis Anda: ")
     cari = st.button("Cari", key="cari")
 
-if cari:
+if cari and st.session_state["lini bisnis"] != "":
         st.session_state["inspirasi"] = DDGS().chat(f"Tuliskan hasil pencarian dalam bahasa indoensia yang jelas dan informatif.Analisa bisnis dalam lini {input} yang paling cocok dijalankan di Tahun 2024 dalam konteks bisnis Indonesia. Bisnis tersebut harus bisa dijalnkan oleh UMKM, buatkan juga alasan dari masing masing masukan tersebut. Tuliskan sumber bacaan dan link untuk masing masing usulan bisnis", model='llama-3-70b')
-        st.session_state["inspirasi"]
-        input
+        
+
+if "inspirasi" in st.session_state: 
+     st.session_state["inspirasi"]
+else:
+     st.write("Silahkan tulis lini bisnis yang ingin Anda riset")
+
+#st.session_state
+        
     
