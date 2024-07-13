@@ -33,7 +33,7 @@ with st.sidebar:
     cari = st.button("Cari", key="cari")
 
 if cari:
-        st.session_state["inspirasi"] = DDGS().chat(f"Tuliskan hasil pencarian dalam bahasa indoensia yang jelas dan informatif.Analisa bisnis dalam lini {input} yang paling cocok dijalankan di Tahun 2024. Bisnis tersebut harus bisa dijalnkan oleh UMKM, buatkan juga alasan dari masing masing masukan tersebut. Tuliskan sumber bacaan dan link untuk masing masing usulan bisnis", model='llama-3-70b')
+        st.session_state["inspirasi"] = DDGS().chat(f"Tuliskan hasil pencarian dalam bahasa indoensia yang jelas dan informatif.Analisa bisnis dalam lini {input} yang paling cocok dijalankan di Tahun 2024 dalam konteks bisnis Indonesia. Bisnis tersebut harus bisa dijalnkan oleh UMKM, buatkan juga alasan dari masing masing masukan tersebut. Tuliskan sumber bacaan dan link untuk masing masing usulan bisnis", model='llama-3-70b')
         st.session_state["inspirasi"]
         input
     
