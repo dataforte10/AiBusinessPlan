@@ -15,7 +15,6 @@ llm = Groq(model="llama3-70b-8192", api_key=GROOQ_API_KEY)
 # Page configuration
 st.set_page_config(page_title="Business Assistant", layout="wide")
 
-#st.header("Business Assistant")
 # Sidebar
 with st.sidebar:
     st.header("Business Assistant")
@@ -34,6 +33,24 @@ if 'business_idea' not in st.session_state:
         'who': '',
         'how': ''
     }
+
+if 'plan_generated' not in st.session_state:
+    st.session_state['plan_generated'] = False
+
+if 'business_plan' not in st.session_state:
+    st.session_state['business_plan'] = ""
+
+if 'plan_eksekusi' not in st.session_state:
+    st.session_state['plan_eksekusi'] = ""
+
+if 'sosmed_plan' not in st.session_state:
+    st.session_state['sosmed_plan'] = ""
+
+if 'konten_plan' not in st.session_state:
+    st.session_state['konten_plan'] = ""
+
+if 'business_draft' not in st.session_state:
+    st.session_state['business_draft'] = ""
 
 def update_business_idea():
     st.session_state.business_idea['what'] = what_data
@@ -78,9 +95,9 @@ def raw_data(what_data, why_data, where_data, when_data, who_data, how_data):
         f"Bisnis ini akan diterapkan di {where_data}. "
         f"Waktu menjalankan bisnis ini adalah {when_data}. "
         f"Target bisnis ini adalah {who_data}. "
-        f"Rencana bisnis ini adalah sebagai berikut: {how_data}."
-        f"berdasarkan data tersebut, tuliskan rencana bisnis yang sesuai dengan data tersebut. Tuliskan dalam bentuk narasi yang jelas dan infomarmatif dalam bahasa indonesia"
-        f"struktur tulisan dengan membuat bisnis model canvas"
+        f"Rencana bisnis ini adalah sebagai berikut: {how_data}. "
+        f"Berdasarkan data tersebut, tuliskan rencana bisnis yang sesuai dengan data tersebut. Tuliskan dalam bentuk narasi yang jelas dan informatif dalam bahasa Indonesia "
+        f"struktur tulisan dengan membuat bisnis model canvas."
     )
     return template
 
@@ -101,7 +118,7 @@ def generate_business_plan():
 
 with tab1:
     st.header("Ide Bisnis")
-    st.write("Gambarkan ide bisnis Anda, sebagai panduan,silahkan tuliskan 5W 1H dari ide bisnis Anda.")
+    st.write("Gambarkan ide bisnis Anda, sebagai panduan, silahkan tuliskan 5W 1H dari ide bisnis Anda.")
 
     what_data = st.text_area(
         label="Apa ide bisnis anda",
@@ -158,42 +175,44 @@ with tab1:
             type="primary"
         ):
             update_business_idea()
-            st.success("Business idea updated successfully!")
+            st.session_state['plan_generated'] = True
+            st.session_state['business_plan'] = generate_business_plan()
+            st.session_state['plan_eksekusi'] = generate_content(
+                f"Buat dalam bahasa Indonesia yang informatif, berdasarkan {st.session_state['business_plan']} yang sudah dibuat, buatkan rencana pelaksanaan bisnis dengan alur sebagai berikut: 1. hal pertama yang harus dikerjakan [bila dirasa perlu membuat badan hukum, buatlah badan hukum dengan menggunakan SSO]."
+            )
+            st.session_state['sosmed_plan'] = generate_content(
+                f"Buat dalam bahasa Indonesia yang informatif, berdasarkan {st.session_state['business_plan']} yang sudah dibuat, buatkan rencana sosial media yang harus dikerjakan dalam bisnis. Tampilkan rekomendasi sosial media apa yang paling sesuai untuk industri dan bisnis yang ditulis dan sertakan alasan dari pemilihan sosial media tersebut."
+            )
+            st.session_state['konten_plan'] = generate_content(
+                f"Berdasarkan pilihan sosial media {st.session_state['sosmed_plan']} yang sudah dibuat, buatkan usulan konten dengan struktur: jenis sosial media, usul konten (kalau gambar tuliskan prompt, atau script untuk video), dan copywriting yang sesuai dengan konten yang ada."
+            )
+            st.session_state['business_draft'] = generate_content(
+                f"Buat dalam bahasa Indonesia yang informatif berdasarkan {st.session_state['business_plan']} yang sudah dibuat, hanya buatkan ringkasan berupa poin-poin dari bisnis ini dengan data: Jenis bisnis (Jasa, FMCG, Retail, Perdagangan, lainnya), target pasar, peraturan pemerintah apa yang harus ditaati. Tidak perlu menampilkan key point."
+            )
+            st.success("Business plan generated successfully!")
     with reset_button:
         if st.button(
             label="Reset",
             type="secondary"
         ):
             clear_business_idea()
+            st.session_state['plan_generated'] = False
             st.success("Cleared Form")
 
-if st.session_state['business_idea']['what']:
+if st.session_state['plan_generated']:
     with tab2:
-        with st.spinner("Generating business plan..."):
-            st.subheader("Business Plan")
-            business_plan = generate_business_plan()
-            st.write(business_plan)
+        st.subheader("Business Plan")
+        st.write(st.session_state['business_plan'])
 
     with tab3:
-        with st.spinner("Generation Rencana eksekusi"):
-            st.subheader("Rencana aksi (action plan)")
-            prompt_eksekusi=f"Buat dalam bahasa Indoensia yang informatif,Berdasarkan {business_plan} yang sudah dibuat,buatkan rencana pelaksanaan bisnis dengan alur sebagai berikut:1.hal pertama yang harus dikerjakan[bila dirasa perlu membuat badan hukum, buatlah badan hukum dengan menggunakan SSO]\n"
-            plan_eksekusi = generate_content(prompt_eksekusi)
-            st.markdown(f'<div class="stock-analysis">{plan_eksekusi}</div>', unsafe_allow_html=True)
+        st.subheader("Rencana aksi (action plan)")
+        st.markdown(f'<div class="stock-analysis">{st.session_state["plan_eksekusi"]}</div>', unsafe_allow_html=True)
 
     with tab4:
-        with st.spinner("Generate sosial media strategy"):
-            st.subheader("Sosial media yang diusulkan")
-            prompt_sosmed= f"Buat dalam bahasa Indoensia yang informatif,berdasarkan {business_plan} yang sudah dibuat,buatkan rencana sosial media yang harus dikerjakan dalam bisnis.Tampilkan rekomendasi sosial media apa yang paling sesuai untuk industri dan bisnis yang ditulis dan sertakan alasan dari pemilihan sosial media tersebut."
-            sosmed_plan = generate_content(prompt_sosmed)
-            st.markdown(f'<div class="stock-analysis">{sosmed_plan}</div>', unsafe_allow_html=True)
-            st.subheader("Usulan konten sosial media")
-            prompt_konten= f"berdasarkan pilihan sosial media {sosmed_plan} yang sudah dibuat, buatkan usulan konten dengan struktur: jenis sosial media, usul konten(kalau gambar tuliskan prompt, atau script untuk video), dan copywriting yang sesuai dengan konten yang ada "
-            konten_plan = generate_content(prompt_konten)
-            st.markdown(f'<div class="stock-analysis">{konten_plan}</div>', unsafe_allow_html=True)
+        st.subheader("Sosial media yang diusulkan")
+        st.markdown(f'<div class="stock-analysis">{st.session_state["sosmed_plan"]}</div>', unsafe_allow_html=True)
+        st.subheader("Usulan konten sosial media")
+        st.markdown(f'<div class="stock-analysis">{st.session_state["konten_plan"]}</div>', unsafe_allow_html=True)
 
-    prompt_draft=f"Buat dalam bahasa Indoensia yang informatif berdasarkan {business_plan} yang sudah dibuat, hanya buatkan ringkasan berupa poin poin dari bisnis inside dengan data : Jenis bisnis (Jasa, FMCG, Retail, Perdagangan, lainnya), target pasar, peraturan pemerintah apa yang harus ditaati. tidak perlu menampilkan key point "
-    business_draft=generate_content(prompt_draft)
-    business_resume=st.sidebar.markdown(f'<div class="stock-analysis">{business_draft}</div>', unsafe_allow_html=True)
-
-            
+    st.sidebar.subheader("Ringkasan Bisnis")
+    st.sidebar.markdown(f'<div class="stock-analysis">{st.session_state["business_draft"]}</div>', unsafe_allow_html=True)
