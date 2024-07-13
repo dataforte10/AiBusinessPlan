@@ -31,18 +31,21 @@ if "sosmedPlanDetail" not in st.session_state:
 
 sosial_media_plan = st.session_state["sosmed_plan"]
 
-
-
 # Sidebar content
 with st.sidebar:
     st.title("Data Bisnis Anda")
-    if st.session_state["sosmed_plan"]is None:
-        sosmed_plan = st.text_area(label="Tuliskan rencana konten Anda disini:", height=300)
-        create_sosmed=st.button("Create Sosmed")
+    sosmed_plan = st.text_area(label="Tuliskan rencana konten Anda disini:", height=300)
+    create_sosmed=st.button("Create Sosmed")
 
-    if create_sosmed:
+    if sosmed_plan != "" and create_sosmed:
         sosmedPlanDetailPrompt = f"Analisa {sosmed_plan}. Perhatikan sosial media rekomdenasi dari {sosmed_plan} dan buatkan rencana konten untuk masing - masing platform dalam format tabel dengan bahasa indonesia yang baik dan benar untuk 2 minggu dengan tayang 2 hari sekali. Format output adalah waktu tayang, prompt image, copywriting/caption, hashtag"
         st.session_state["sosmedPlanDetail"] = generate_content(sosmedPlanDetailPrompt)
+        
+    #if st.session_state["sosmed_plan"]=="":       
+        #create_sosmed=st.button("Create Sosmed")
+
+    
+    
 st.markdown(f'<div class="stock-analysis">{st.session_state["sosmedPlanDetail"]}</div>', unsafe_allow_html=True)
         
 
