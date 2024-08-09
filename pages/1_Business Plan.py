@@ -94,8 +94,8 @@ def raw_data(what_data, why_data, where_data, when_data, who_data, how_data):
         f"Latar belakang saya membuat bisnis ini adalah {why_data}. "
         f"Bisnis ini akan diterapkan di {where_data}. "
         f"Waktu menjalankan bisnis ini adalah {when_data}. "
-        f"Target bisnis ini adalah {who_data}. "
-        f"Rencana bisnis ini adalah sebagai berikut: {how_data}. "
+        f"Target pasar bisnis ini adalah {who_data}. "
+        f"Rencana bisnis ini akan saya jalankan adalah sebagai berikut: {how_data}. "
         f"Berdasarkan data tersebut, tuliskan rencana bisnis yang sesuai dengan data tersebut. Tuliskan dalam bentuk narasi yang jelas dan informatif dalam bahasa Indonesia "
         f"struktur tulisan dengan membuat bisnis model canvas."
     )
@@ -123,7 +123,7 @@ with tab1:
     what_data = st.text_area(
         label="Apa ide bisnis anda",
         help="Gambarkan secara garis besar ide bisnis anda",
-        placeholder="Gambarkan ide bisnis anda",
+        placeholder="Tuliskan jawaban Anda",
         height=100,
         value=st.session_state.business_idea['what']
     )
@@ -131,7 +131,7 @@ with tab1:
     why_data = st.text_input(
         label="Apa yang melatar belakangi ide bisnis anda",
         help="Gambarkan secara garis besar ide bisnis anda",
-        placeholder="Gambarkan ide bisnis anda",
+        placeholder="Tuliskan jawaban Anda",
         value=st.session_state.business_idea['why']
     )
 
@@ -141,7 +141,7 @@ with tab1:
         where_data = st.text_input(
             label="Dimana sebaiknnya ide bisnis ini diterapkan",
             help="Misal online, offline, ruko, rumahan dsb",
-            placeholder="Gambarkan ide bisnis anda",
+            placeholder="Tuliskan jawaban Anda",
             value=st.session_state.business_idea['where']
         )
 
@@ -149,21 +149,21 @@ with tab1:
         when_data = st.text_input(
             label="Kapan bisnis anda punya momentum",
             help="Business momentum",
-            placeholder="Gambarkan ide bisnis anda",
+            placeholder="Tuliskan jawaban Anda",
             value=st.session_state.business_idea['when']
         )
 
     who_data = st.text_input(
         label="Siapa target pasar anda?",
         help="Gambarkan secara garis besar ide bisnis anda",
-        placeholder="Gambarkan ide bisnis anda",
+        placeholder="Tuliskan jawaban Anda",
         value=st.session_state.business_idea['who']
     )
 
     how_data = st.text_area(
         label="Bagaimana bisnis anda berjalan?",
         help="Secara online, melalui offline, ruko, rumahan dsb",
-        placeholder="Gambarkan ide bisnis anda",
+        placeholder="Tuliskan jawaban Anda",
         height=200,
         value=st.session_state.business_idea['how']
     )
