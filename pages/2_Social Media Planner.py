@@ -64,8 +64,8 @@ if st.session_state["sosmedPlanDetail"] is None and st.session_state["sosmed_pla
     st.session_state["sosmedPlanDetail"] = generate_content(sosmedPlanDetailPrompt)
 
 # Menampilkan hasil jika st.session_state["sosmed_plan"] berisi data
-if st.session_state.get("sosmed_plan") is not None:
-    st.markdown(f'<div class="stock-analysis">{st.session_state["sosmedPlanDetail"]}</div>', unsafe_allow_html=True)
+#if st.session_state.get("sosmed_plan") is not None:
+    #st.markdown(f'<div class="stock-analysis">{st.session_state["sosmedPlanDetail"]}</div>', unsafe_allow_html=True)
 else:
     st.write("")
 
